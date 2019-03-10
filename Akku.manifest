@@ -1,9 +1,9 @@
 #!r6rs ; -*- mode: scheme; coding: utf-8 -*-
 (import (akku format manifest))
 
-(akku-package ("ndarray" "1.0.0-alpha.0")
-  (synopsis "I did not edit Akku.manifest")
-  (authors "Guy Q. Schemer")
+(akku-package ("ndarray" "0.0.1-alpha.0")
+  (synopsis "Hacking on a NumPy-like ndarray for R6RS Scheme")
+  (authors "Rhys Ulerich")
   (license "MIT")
   (depends ("chez-srfi" ">=0.0.0-akku <1.0.0"))
 )
