@@ -48,15 +48,15 @@ compiler:
   - gcc
 
 before_script:
-  # Install scheme-ci following https://github.com/weinholt/scheme-ci
-  - wget https://github.com/weinholt/scheme-ci/archive/master.zip -O scheme-ci-master.zip
-  - unzip scheme-ci-master.zip
-  - eval "$(INSTALL_TARGET=$HOME/opt scheme-ci-master/install-scheme.sh $SCHEME)"
   # Install Akku.csm following https://github.com/weinholt/uuid
   - gpg --keyserver pool.sks-keyservers.net --recv-keys 08272FBB54EEB5072D5BA930E33E61A2E9B8C3A2
   - curl -A "$TRAVIS_REPO_SLUG" -LO "https://akku.weinholt.se/get-akku.sh{,.sig}"
   - gpg --verify get-akku.sh.sig get-akku.sh && bash get-akku.sh
   - ~/bin/akku install
+  # Install scheme-ci following https://github.com/weinholt/scheme-ci
+  - wget https://github.com/weinholt/scheme-ci/archive/master.zip -O scheme-ci-master.zip
+  - unzip scheme-ci-master.zip
+  - eval "$(INSTALL_TARGET=$HOME/opt scheme-ci-master/install-scheme.sh $SCHEME)"
 
 script:
   - source .akku/bin/activate && ./run-tests.sh
