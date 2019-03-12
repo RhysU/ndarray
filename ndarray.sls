@@ -7,7 +7,19 @@
   (export hello)  ; TODO
   (import (rnrs))
 
-; https://en.wikipedia.org/wiki/Dope_vector
+; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
+(define-record-type
+  dtype
+  (fields (immutable kind)
+          (immutable itemsize)
+          (immutable alignment)
+          (immutable ref)
+          (immutable set!))
+  (opaque #t)
+  (sealed #t))
+
+
+; https://en.wikipedia.org/wiki/Dope_vector specified in units of itemsize
 (define-record-type
   dope
   (fields (immutable shape)
@@ -18,9 +30,7 @@
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   ndarray
-  (fields (immutable typekind)
-          (immutable itemsize)
-          (immutable flags)
+  (fields (immutable dtype)
           (immutable dope)
           (immutable offset)
           (immutable bytevector))
