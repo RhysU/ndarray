@@ -4,19 +4,28 @@
 #!r6rs
 
 (library (ndarray)
-  (export hello)
+  (export hello)  ; TODO
   (import (rnrs))
 
+; https://en.wikipedia.org/wiki/Dope_vector
+(define-record-type
+  dope
+  (fields (immutable shape)
+          (immutable stride))
+  (opaque #t)
+  (sealed #t))
+
+; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   ndarray
-  (opaque #t)
   (fields (immutable typekind)
           (immutable itemsize)
           (immutable flags)
-          (immutable shape)
-          (immutable strides)
+          (immutable dope)
           (immutable offset)
-          (immutable bytevector)))
+          (immutable bytevector))
+  (opaque #t)
+  (sealed #t))
 
 (define (hello whom)
   (string-append "Hello " whom "!")))
