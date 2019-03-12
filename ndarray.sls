@@ -7,5 +7,16 @@
   (export hello)
   (import (rnrs))
 
+(define-record-type
+  ndarray
+  (opaque #t)
+  (fields (immutable typekind)
+          (immutable itemsize)
+          (immutable flags)
+          (immutable shape)
+          (immutable strides)
+          (immutable offset)
+          (immutable bytevector)))
+
 (define (hello whom)
   (string-append "Hello " whom "!")))
