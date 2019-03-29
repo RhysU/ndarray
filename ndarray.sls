@@ -81,13 +81,16 @@
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
-  ndarray
+  (ndarray make-ndarray* ndarray?)
   (fields (immutable dtype)
           (immutable dope)
           (immutable offset)
           (immutable bytevector))
   (opaque #t)
   (sealed #t))
+
+; TODO Create row-major ndarray given dtype and shape
+; TODO Create column-major ndarray given dtype and shape
 
 (define (hello whom)
   (string-append "Hello " whom "!")))
