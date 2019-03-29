@@ -74,6 +74,10 @@
                 `(1)
                 (cdr shape))))
 
+; Compute "F" (i.e. column-major) strides for given shape
+(define (stride-f shape)
+  (reverse (stride-c (reverse shape))))
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   ndarray
