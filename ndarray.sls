@@ -8,9 +8,10 @@
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
+; In particular, 'descr' follows NumPy conventions.
 (define-record-type
   dtype
-  (fields (immutable kind)
+  (fields (immutable descr)
           (immutable itemsize)
           (immutable alignment)
           (immutable ref)
@@ -18,6 +19,37 @@
   (opaque #t)
   (sealed #t))
 
+; Single bytes
+(define dtype-s8
+  (make-dtype "|i1" 1 1 bytevector-s8-ref bytevector-s8-set!))
+(define dtype-u8
+  (make-dtype "|u1" 1 1 bytevector-u8-ref bytevector-u8-set!))
+
+; Signed integers
+(define dtype-s16
+  (make-dtype "=i2" 2 2 bytevector-s16-native-ref bytevector-s16-native-set!))
+(define dtype-s32
+  (make-dtype "=i4" 4 4 bytevector-s32-native-ref bytevector-s32-native-set!))
+(define dtype-s64
+  (make-dtype "=i8" 8 8 bytevector-s64-native-ref bytevector-s64-native-set!))
+
+; Unsigned integers
+(define dtype-u16
+  (make-dtype "=u2" 2 2 bytevector-u16-native-ref bytevector-u16-native-set!))
+(define dtype-u32
+  (make-dtype "=u4" 4 4 bytevector-u32-native-ref bytevector-u32-native-set!))
+(define dtype-u64
+  (make-dtype "=u8" 8 8 bytevector-u64-native-ref bytevector-u64-native-set!))
+
+; Single- and double-precision floating point
+(define dtype-f32
+  (make-dtype "=f4" 4 4
+              bytevector-ieee-single-native-ref
+              bytevector-ieee-single-native-set!))
+(define dtype-f64
+  (make-dtype "=f8" 8 8
+              bytevector-ieee-double-native-ref
+              bytevector-ieee-double-native-set!))
 
 ; https://en.wikipedia.org/wiki/Dope_vector specified in units of itemsize
 (define-record-type
