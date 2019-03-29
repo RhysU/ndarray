@@ -65,6 +65,15 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
+; Compute "C" (i.e. row-major) strides for given shape
+(define (stride-c shape)
+  (if (null? shape)
+    `()
+    (fold-right (lambda (a bs)
+                  (cons (* a (car bs)) bs))
+                `(1)
+                (cdr shape))))
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   ndarray
