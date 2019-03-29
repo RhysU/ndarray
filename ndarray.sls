@@ -59,6 +59,7 @@
   (opaque #t)
   (sealed #t))
 
+; Shape and stride taken as lists then copied into vectors
 (define (make-dope shape stride)
   (let ((shape* (list->vector shape))
         (stride* (list->vector stride)))
