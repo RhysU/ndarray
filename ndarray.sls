@@ -53,11 +53,17 @@
 
 ; https://en.wikipedia.org/wiki/Dope_vector specified in units of itemsize
 (define-record-type
-  dope
+  (dope make-dope* dope?)
   (fields (immutable shape)
           (immutable stride))
   (opaque #t)
   (sealed #t))
+
+(define (make-dope shape stride)
+  (let ((shape* (list->vector shape))
+        (stride* (list->vector stride)))
+    (assert (= (vector-length shape*) (vector-length stride*)))
+    (make-dope* shape* stride*)))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
