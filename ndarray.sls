@@ -7,6 +7,8 @@
   (export hello)  ; TODO
   (import (rnrs))
 
+; TODO dtype-const is a parent of dtype simply lacking set!
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
 (define-record-type
@@ -91,6 +93,10 @@
 
 ; TODO Create row-major ndarray given dtype and shape
 ; TODO Create column-major ndarray given dtype and shape
+; TODO Generic getter
+; TODO Generic setter
+; TODO Mutable views into existing ndarrays
+; TODO Immutable views into existing ndarrays
 
 (define (hello whom)
   (string-append "Hello " whom "!")))
