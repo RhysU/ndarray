@@ -73,16 +73,20 @@
   (cons (* x (car a)) a))
 
 ; Compute "C" (i.e. row-major) for shape with given fastest stride
-(define (stride-c shape)
+(define (stride-c shape fastest)
+  (assert (list? shape))
+  (assert (number? fastest))
   (if (null? shape)
     `()
-    (fold-left stride-combine `(1) (reverse (cdr shape)))))
+    (fold-left stride-combine (list fastest) (reverse (cdr shape)))))
 
 ; Compute "F" (i.e. column-major) for shape with given fastest stride
-(define (stride-f shape)
+(define (stride-f fastest shape)
+  (assert (number? fastest))
+  (assert (list? shape))
   (if (null? shape)
     `()
-    (reverse (cdr (fold-left stride-combine `(1) shape)))))
+    (reverse (cdr (fold-left stride-combine (list fastest) shape)))))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
