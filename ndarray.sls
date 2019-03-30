@@ -68,20 +68,18 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
-; Compute "C" (i.e. row-major) for shape with given fastest stride
-(define (stride-c fastest shape)
-  (assert (number? fastest))
+; Compute "C" (i.e. row-major) strides for contiguous shape
+(define (stride-c shape)
   (assert (list? shape))
-  (let loop ((m fastest) (xs (reverse shape)) (as `()))
+  (let loop ((m 1) (xs (reverse shape)) (as `()))
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))
       as)))
 
-; Compute "F" (i.e. column-major) for shape with given fastest stride
-(define (stride-f fastest shape)
-  (assert (number? fastest))
+; Compute "F" (i.e. column-major) strides for contiguous shape
+(define (stride-f shape)
   (assert (list? shape))
-  (let loop ((m fastest) (xs shape) (as `()))
+  (let loop ((m 1) (xs shape) (as `()))
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))
       (reverse as))))
