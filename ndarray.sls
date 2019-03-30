@@ -78,12 +78,13 @@
       (reverse as))))
 
 ; Shape and stride taken as lists then copied into vectors.
-; Strides may either a list or procedures like stride-c or stride-f.
+; Strides may be supplied as lists, vectors, or procedures.
 (define (make-dope striding shape)
-  (let ((stride* (list->vector (if (procedure? striding)
-                                 (striding shape)
-                                 striding)))
-        (shape* (list->vector shape)))
+  (let [(stride* (cond ((vector? striding) striding)
+                       ((list? striding) (list->vector striding))
+                       ((procedure? striding) (list->vector (striding shape)))
+                       (else (assertion-violation `make-dope "bad" striding))))
+        (shape* (list->vector shape))]
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
