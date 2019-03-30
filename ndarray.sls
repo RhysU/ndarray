@@ -68,21 +68,21 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
-; Compute "C" (i.e. row-major) strides for given shape
+; Helper to simplify defining stride-c and stride-f
+(define (stride-combine a x)
+  (cons (* x (car a)) a))
+
+; Compute "C" (i.e. row-major) for shape with given fastest stride
 (define (stride-c shape)
   (if (null? shape)
     `()
-    (fold-left (lambda (as b) (cons (* b (car as)) as))
-               `(1)
-               (reverse (cdr shape)))))
+    (fold-left stride-combine `(1) (reverse (cdr shape)))))
 
-; Compute "F" (i.e. column-major) strides for given shape
+; Compute "F" (i.e. column-major) for shape with given fastest stride
 (define (stride-f shape)
   (if (null? shape)
     `()
-    (reverse (cdr (fold-left (lambda (as b) (cons (* b (car as)) as))
-                             `(1)
-                             shape)))))
+    (reverse (cdr (fold-left stride-combine `(1) shape)))))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
