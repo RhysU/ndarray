@@ -61,13 +61,6 @@
   (opaque #t)
   (sealed #t))
 
-; Shape and stride taken as lists then copied into vectors
-(define (make-dope stride shape)
-  (let ((stride* (list->vector stride))
-        (shape* (list->vector shape)))
-    (assert (= (vector-length shape*) (vector-length stride*)))
-    (make-dope* shape* stride*)))
-
 ; Compute "C" (i.e. row-major) strides for contiguous shape
 (define (stride-c shape)
   (assert (list? shape))
@@ -83,6 +76,16 @@
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))
       (reverse as))))
+
+; Shape and stride taken as lists then copied into vectors.
+; Strides may either a list or procedures like stride-c or stride-f.
+(define (make-dope striding shape)
+  (let ((stride* (list->vector (if (procedure? striding)
+                                 (striding shape)
+                                 striding)))
+        (shape* (list->vector shape)))
+    (assert (= (vector-length shape*) (vector-length stride*)))
+    (make-dope* shape* stride*)))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
