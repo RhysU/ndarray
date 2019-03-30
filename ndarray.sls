@@ -69,9 +69,9 @@
     (make-dope* shape* stride*)))
 
 ; Compute "C" (i.e. row-major) for shape with given fastest stride
-(define (stride-c shape fastest)
-  (assert (list? shape))
+(define (stride-c fastest shape)
   (assert (number? fastest))
+  (assert (list? shape))
   (let loop ((m fastest) (xs (reverse shape)) (as `()))
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))

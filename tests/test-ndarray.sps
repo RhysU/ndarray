@@ -9,11 +9,11 @@
         (ndarray))
 
 (test-begin "stride-c")
-(test-equal `()        (stride-c `() 1))
-(test-equal `(1)       (stride-c `(2) 1))
-(test-equal `(3 1)     (stride-c `(2 3) 1))
-(test-equal `(18  6 1) (stride-c `(2 3 6) 1))
-(test-equal `(36 12 2) (stride-c `(2 3 6) 2))
+(test-equal `()        (stride-c 1 `()))
+(test-equal `(1)       (stride-c 1 `(2)))
+(test-equal `(3 1)     (stride-c 1 `(2 3)))
+(test-equal `(18  6 1) (stride-c 1 `(2 3 6)))
+(test-equal `(36 12 2) (stride-c 2 `(2 3 6)))
 (test-end)
 
 (test-begin "stride-f")
