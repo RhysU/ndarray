@@ -77,13 +77,10 @@
       (loop (* m (car xs)) (cdr xs) (cons m as))
       (reverse as))))
 
-; Shape and stride taken as lists then copied into vectors.
-; Strides may be supplied as lists, vectors, or procedures.
+; Supply striding (list or unary procedure list stride-c) and shape
 (define (make-dope striding shape)
-  (let [(stride* (cond ((vector? striding) striding)
-                       ((list? striding) (list->vector striding))
-                       ((procedure? striding) (list->vector (striding shape)))
-                       (else (assertion-violation `make-dope "bad" striding))))
+  (let [(stride* (list->vector (cond ((procedure? striding) (striding shape))
+                                     (else striding))))
         (shape* (list->vector shape))]
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
