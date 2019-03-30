@@ -84,9 +84,10 @@
 (define (stride-f fastest shape)
   (assert (number? fastest))
   (assert (list? shape))
-  (if (null? shape)
-    `()
-    (reverse (cdr (fold-left stride-combine (list fastest) shape)))))
+  (let loop ((m fastest) (xs shape) (as `()))
+    (if (pair? xs)
+      (loop (* m (car xs)) (cdr xs) (cons m as))
+      (reverse as))))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
