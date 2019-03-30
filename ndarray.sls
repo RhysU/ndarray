@@ -68,17 +68,14 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
-; Helper to simplify defining stride-c and stride-f
-(define (stride-combine a x)
-  (cons (* x (car a)) a))
-
 ; Compute "C" (i.e. row-major) for shape with given fastest stride
 (define (stride-c shape fastest)
   (assert (list? shape))
   (assert (number? fastest))
-  (if (null? shape)
-    `()
-    (fold-left stride-combine (list fastest) (reverse (cdr shape)))))
+  (let loop ((m fastest) (xs (reverse shape)) (as `()))
+    (if (pair? xs)
+      (loop (* m (car xs)) (cdr xs) (cons m as))
+      as)))
 
 ; Compute "F" (i.e. column-major) for shape with given fastest stride
 (define (stride-f fastest shape)
