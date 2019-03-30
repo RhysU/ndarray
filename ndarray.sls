@@ -4,7 +4,7 @@
 #!r6rs
 
 (library (ndarray)
-  (export hello)  ; TODO
+  (export stride-c stride-f)
   (import (rnrs))
 
 ; TODO dtype-const is a parent of dtype simply lacking set!
@@ -72,14 +72,17 @@
 (define (stride-c shape)
   (if (null? shape)
     `()
-    (fold-right (lambda (a bs)
-                  (cons (* a (car bs)) bs))
-                `(1)
-                (cdr shape))))
+    (fold-left (lambda (as b) (cons (* b (car as)) as))
+               `(1)
+               (reverse (cdr shape)))))
 
 ; Compute "F" (i.e. column-major) strides for given shape
 (define (stride-f shape)
-  (reverse (stride-c (reverse shape))))
+  (if (null? shape)
+    `()
+    (reverse (cdr (fold-left (lambda (as b) (cons (* b (car as)) as))
+                             `(1)
+                             shape)))))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
@@ -97,6 +100,4 @@
 ; TODO Generic setter
 ; TODO Mutable views into existing ndarrays
 ; TODO Immutable views into existing ndarrays
-
-(define (hello whom)
-  (string-append "Hello " whom "!")))
+)

@@ -4,7 +4,8 @@
 ;; SPDX-License-Identifier: MIT
 #!r6rs
 
-(import (rnrs (6)) (ndarray))
+(import (rnrs (6))
+        (ndarray))
 
-(display (hello "World"))
+(display "Hello, world!")
 (newline)
