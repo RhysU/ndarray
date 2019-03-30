@@ -7,8 +7,6 @@
   (export stride-c stride-f)
   (import (rnrs))
 
-; TODO dtype-const is a parent of dtype simply lacking set!
-
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
 (define-record-type
@@ -95,10 +93,10 @@
   (opaque #t)
   (sealed #t))
 
-; TODO Create row-major ndarray given dtype and shape
-; TODO Create column-major ndarray given dtype and shape
+; FIXME Starthere
+; (define (make-ndarray dtype dope))
+
 ; TODO Generic getter
 ; TODO Generic setter
-; TODO Mutable views into existing ndarrays
-; TODO Immutable views into existing ndarrays
+; TODO Mutable subsets of existing ndarrays
 )
