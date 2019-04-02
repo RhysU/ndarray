@@ -12,8 +12,6 @@
     make-ndarray ndarray? #|more...|#)
   (import (rnrs))
 
-; FIXME Generative or not?
-
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
 (define-record-type
@@ -24,7 +22,8 @@
           (immutable ref)
           (immutable set!))
   (opaque #f)
-  (sealed #t))
+  (sealed #t)
+  (nongenerative))
 
 ; Single bytes
 (define dtype-s8
@@ -64,7 +63,8 @@
   (fields (immutable stride)
           (immutable shape))
   (opaque #f)
-  (sealed #t))
+  (sealed #t)
+  (nongenerative))
 
 ; Compute "C" (i.e. row-major) strides for contiguous shape
 (define (stride-c shape)
@@ -119,7 +119,8 @@
           (immutable offset)
           (immutable bytevector))
   (opaque #f)
-  (sealed #t))
+  (sealed #t)
+  (nongenerative))
 
 ; Construct an uninitialized ndarray with the given dtype and dope
 (define (make-ndarray dtype dope)
