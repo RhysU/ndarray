@@ -7,6 +7,8 @@
   (export stride-c stride-f)
   (import (rnrs))
 
+; FIXME Generative or not?
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
 (define-record-type
@@ -16,7 +18,7 @@
           (immutable alignment)
           (immutable ref)
           (immutable set!))
-  (opaque #t)
+  (opaque #f)
   (sealed #t))
 
 ; Single bytes
@@ -56,7 +58,7 @@
   (dope make-dope* dope?)
   (fields (immutable stride)
           (immutable shape))
-  (opaque #t)
+  (opaque #f)
   (sealed #t))
 
 ; Compute "C" (i.e. row-major) strides for contiguous shape
@@ -83,6 +85,27 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* shape* stride*)))
 
+; A limited fold for pairwise reduction of vectors v1 and v2.
+; Cleaner alternative is adopting SRFI 43 but eschewing dependency for now.
+(define (vector-fold2 combine nil vector1 vector2)
+  (let ((length1 (vector-length vector1))
+        (length2 (vector-length vector2)))
+    (assert (= length1 length2))
+    (let loop ((i 0) (cur nil))
+      (if (< i length1)
+        (loop
+          (+ i 1)
+          (combine cur (vector-ref vector1 i) (vector-ref vector2 i)))
+        cur))))
+
+; Compute contiguous size, measured in items, necessary to store dope
+(define (size dope)
+  (vector-fold2
+    (lambda (cur strideN shapeN) (max cur (* strideN shapeN)))
+    0
+    (dope-stride dope)
+    (dope-shape dope)))
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   (ndarray make-ndarray* ndarray?)
@@ -90,8 +113,10 @@
           (immutable dope)
           (immutable offset)
           (immutable bytevector))
-  (opaque #t)
+  (opaque #f)
   (sealed #t))
+
+; (define (make-ndarray dtype dope))
 
 ; FIXME Starthere
 ; (define (make-ndarray dtype dope))
