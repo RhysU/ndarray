@@ -116,10 +116,13 @@
   (opaque #f)
   (sealed #t))
 
-; (define (make-ndarray dtype dope))
-
-; FIXME Starthere
-; (define (make-ndarray dtype dope))
+; Construct an un-initialized ndarray with the given dtype and dope
+(define (make-ndarray dtype dope)
+  (make-ndarray
+    dtype
+    dope
+    0
+    (make-bytevector (* (size dope) (dtype-itemsize dtype)))))
 
 ; TODO Generic getter
 ; TODO Generic setter
