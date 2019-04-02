@@ -88,7 +88,7 @@
                                      (else striding))))
         (shape* (list->vector shape))]
     (assert (= (vector-length shape*) (vector-length stride*)))
-    (make-dope* shape* stride*)))
+    (make-dope* stride* shape*)))
 
 ; A limited fold for pairwise reduction of vectors v1 and v2.
 ; Cleaner alternative is adopting SRFI 43 but eschewing dependency for now.
