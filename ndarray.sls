@@ -4,7 +4,12 @@
 #!r6rs
 
 (library (ndarray)
-  (export stride-c stride-f)
+  (export
+    dtype-s8 dtype-s16 dtype-s32 dtype-s64
+    dtype-u8 dtype-u16 dtype-u32 dtype-u64
+    stride-c stride-f
+    make-dope dope? dope-stride dope-shape
+    make-ndarray ndarray? #|more...|#)
   (import (rnrs))
 
 ; FIXME Generative or not?
@@ -116,9 +121,9 @@
   (opaque #f)
   (sealed #t))
 
-; Construct an un-initialized ndarray with the given dtype and dope
+; Construct an uninitialized ndarray with the given dtype and dope
 (define (make-ndarray dtype dope)
-  (make-ndarray
+  (make-ndarray*
     dtype
     dope
     0
