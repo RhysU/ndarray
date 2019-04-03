@@ -90,26 +90,14 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* stride* shape*)))
 
-; A limited fold for pairwise reduction of vectors v1 and v2.
-; Cleaner alternative is adopting SRFI 43 but eschewing dependency for now.
-(define (vector-fold2 combine nil vector1 vector2)
-  (let ((length1 (vector-length vector1))
-        (length2 (vector-length vector2)))
-    (assert (= length1 length2))
-    (let loop ((i 0) (cur nil))
-      (if (< i length1)
-        (loop
-          (+ i 1)
-          (combine cur (vector-ref vector1 i) (vector-ref vector2 i)))
-        cur))))
-
 ; Compute contiguous size, measured in items, necessary to store dope
 (define (size dope)
-  (vector-fold2
-    (lambda (cur strideN shapeN) (max cur (* strideN shapeN)))
-    0
-    (dope-stride dope)
-    (dope-shape dope)))
+  (let ((size 0))
+    (vector-for-each
+      (lambda (x y) (set! size (max size (* x y))))
+      (dope-stride dope)
+      (dope-shape dope))
+    size))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
