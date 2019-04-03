@@ -92,12 +92,23 @@
 
 ; Compute contiguous size, measured in items, necessary to store dope
 (define (size dope)
+  (assert (dope? dope))
   (let ((size 0))
     (vector-for-each
       (lambda (x y) (set! size (max size (* x y))))
       (dope-stride dope)
       (dope-shape dope))
     size))
+
+; Scale strides by some given itemsize.  For example, stride over floats.
+(define (scale dope itemsize)
+  (assert (dope? dope))
+  (assert (list? itemsize))
+  (make-dope*
+    (vector-map
+      (lambda (x) (* itemsize x))
+      (dope-stride dope))
+    (dope-shape dope)))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
@@ -114,7 +125,7 @@
 (define (make-ndarray dtype dope)
   (make-ndarray*
     dtype
-    dope
+    (scale dope (dtype-itemsize dtype))
     0
     (make-bytevector (* (size dope) (dtype-itemsize dtype)))))
 
