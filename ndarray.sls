@@ -123,11 +123,12 @@
 
 ; Construct an uninitialized ndarray with the given dtype and dope
 (define (make-ndarray dtype dope)
-  (make-ndarray*
-    dtype
-    (scale dope (dtype-itemsize dtype))
-    0
-    (make-bytevector (* (size dope) (dtype-itemsize dtype)))))
+  (let ((itemsize (dtype-itemsize dtype)))
+    (make-ndarray*
+      dtype
+      (scale dope itemsize)
+      0
+      (make-bytevector (* (size dope) itemsize)))))
 
 ; TODO Generic getter
 ; TODO Generic setter
