@@ -103,7 +103,7 @@
 ; Scale strides by some given itemsize.  For example, stride over floats.
 (define (scale dope itemsize)
   (assert (dope? dope))
-  (assert (list? itemsize))
+  (assert (number? itemsize))
   (make-dope*
     (vector-map
       (lambda (x) (* itemsize x))
