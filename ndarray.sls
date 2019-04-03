@@ -9,7 +9,8 @@
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     stride-c stride-f
     make-dope dope? dope-stride dope-shape
-    make-ndarray ndarray? #|more...|#)
+    make-ndarray ndarray?  ; TODO Expose fewer details
+    ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
