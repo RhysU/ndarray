@@ -8,7 +8,7 @@
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     stride-c stride-f
-    make-dope dope? dope-stride dope-shape dope-size dope-scale
+    make-dope dope? dope-stride dope-shape dope-size dope-scale dope-index
     make-ndarray ndarray?  ; TODO Expose fewer details
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector)
   (import (rnrs))
@@ -116,7 +116,7 @@
     (dope-shape dope)))
 
 ; Compute offset for some (i, j, ...) based upon dope-vector strides
-(define (index dope offset . indices)
+(define (dope-index dope offset . indices)
   (let ((stride (dope-stride dope))
         (shape (dope-shape dope)))
     (let loop ((k 0)
