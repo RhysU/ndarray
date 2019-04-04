@@ -147,7 +147,8 @@
     (make-ndarray* dtype rescaled 0 (make-bytevector (dope-size rescaled)))))
 
 (define (ndarray-ref ndarray . indices)
-  ((dtype-ref (ndarray-dtype ndarray))
+  ((dtype-ref
+     (ndarray-dtype ndarray))
    (ndarray-bytevector ndarray)
    (dope-index
      (ndarray-dope ndarray)
