@@ -146,7 +146,7 @@
          (rescaled (dope-scale dope itemsize)))
     (make-ndarray* dtype rescaled 0 (make-bytevector (dope-size rescaled)))))
 
-; Retrieve the scalar entry at the given index
+; Retrieve the scalar value at the given index
 (define (ndarray-ref ndarray . indices)
   ((dtype-ref
      (ndarray-dtype ndarray))
@@ -155,6 +155,17 @@
      (ndarray-dope ndarray)
      (ndarray-offset ndarray)
      indices)))
+
+; Set the given index to the provided scalar value
+(define (ndarray-set! ndarray scalar . indices)
+  ((dtype-set!
+     (ndarray-dtype ndarray))
+   (ndarray-bytevector ndarray)
+   (dope-index
+     (ndarray-dope ndarray)
+     (ndarray-offset ndarray)
+     indices))
+  scalar)
 
 ; TODO Generic getter
 ; TODO Generic setter
