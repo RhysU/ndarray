@@ -5,6 +5,8 @@
 
 (library (ndarray)
   (export
+    make-dtype dtype?
+    dtype-descr dtype-itemsize dtype-alignment dtype-ref dtype-set!
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     stride-c stride-f
@@ -18,7 +20,7 @@
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
 (define-record-type
-  dtype
+  (dtype make-dtype dtype?)
   (fields (immutable descr)
           (immutable itemsize)
           (immutable alignment)
