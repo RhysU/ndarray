@@ -12,7 +12,7 @@
     dope-size dope-scale dope-index
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
-    ndarray-ref)
+    ndarray-ref ndarray-set!)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
