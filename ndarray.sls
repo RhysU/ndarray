@@ -8,7 +8,7 @@
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     stride-c stride-f
-    make-dope dope? dope-stride dope-shape
+    make-dope dope? dope-stride dope-shape dope-size dope-scale
     make-ndarray ndarray?  ; TODO Expose fewer details
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector)
   (import (rnrs))
@@ -96,7 +96,7 @@
   (vector-length (dope-shape dope)))
 
 ; Compute contiguous size, measured in items, necessary to store dope
-(define (size dope)
+(define (dope-size dope)
   (assert (dope? dope))
   (let ((size 0))
     (vector-for-each
@@ -106,7 +106,7 @@
     size))
 
 ; Scale strides by some given itemsize.  For example, stride over floats.
-(define (scale dope itemsize)
+(define (dope-scale dope itemsize)
   (assert (dope? dope))
   (assert (number? itemsize))
   (make-dope*
@@ -149,9 +149,9 @@
   (let ((itemsize (dtype-itemsize dtype)))
     (make-ndarray*
       dtype
-      (scale dope itemsize)
+      (dope-scale dope itemsize)
       0
-      (make-bytevector (* (size dope) itemsize)))))
+      (make-bytevector (* (dope-size dope) itemsize)))))
 
 ; TODO Generic getter
 ; TODO Generic setter
