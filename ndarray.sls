@@ -91,6 +91,10 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* stride* shape*)))
 
+; What is the rank of a dope vector?  That is, then number of dimensions.
+(define (dope-rank dope)
+  (vector-length (dope-shape dope)))
+
 ; Compute contiguous size, measured in items, necessary to store dope
 (define (size dope)
   (assert (dope? dope))
