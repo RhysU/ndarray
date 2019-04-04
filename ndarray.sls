@@ -132,7 +132,6 @@
                 (cdr indices)
                 (+ offset (* i (vector-ref stride k)))))))))
 
-
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   (ndarray make-ndarray* ndarray?)
