@@ -69,7 +69,6 @@
 
 ; Compute "C" (i.e. row-major) strides for contiguous shape
 (define (stride-c shape)
-  (assert (list? shape))
   (let loop ((m 1) (xs (reverse shape)) (as `()))
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))
@@ -77,7 +76,6 @@
 
 ; Compute "F" (i.e. column-major) strides for contiguous shape
 (define (stride-f shape)
-  (assert (list? shape))
   (let loop ((m 1) (xs shape) (as `()))
     (if (pair? xs)
       (loop (* m (car xs)) (cdr xs) (cons m as))
@@ -97,7 +95,6 @@
 
 ; Compute contiguous size, measured in items, necessary to store dope
 (define (dope-size dope)
-  (assert (dope? dope))
   (let ((size 0))
     (vector-for-each
       (lambda (x y) (set! size (max size (* x y))))
@@ -107,8 +104,6 @@
 
 ; Scale strides by some given itemsize.  For example, stride over floats.
 (define (dope-scale dope itemsize)
-  (assert (dope? dope))
-  (assert (number? itemsize))
   (make-dope*
     (vector-map
       (lambda (x) (* itemsize x))
