@@ -127,7 +127,7 @@
           (assert (= k (vector-length stride)))
           offset)
         (let ((i (car indices)))
-          (assert (< i (vector-ref shape i)))
+          (assert (< i (vector-ref shape k)))
           (loop (+ k 1)
                 (cdr indices)
                 (+ offset (* i (vector-ref stride k)))))))))
