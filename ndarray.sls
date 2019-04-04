@@ -115,6 +115,24 @@
       (dope-stride dope))
     (dope-shape dope)))
 
+; Compute offset for some (i, j, ...) based upon dope-vector strides
+(define (index dope offset . indices)
+  (let ((stride (dope-stride dope))
+        (shape (dope-shape dope)))
+    (let loop ((k 0)
+               (indices indices)
+               (offset offset))
+      (if (null? indices)
+        (begin
+          (assert (= k (vector-length stride)))
+          offset)
+        (let ((i (car indices)))
+          (assert (< i (vector-ref shape i)))
+          (loop (+ k 1)
+                (cdr indices)
+                (+ offset (* i (vector-ref stride k)))))))))
+
+
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.interface.html
 (define-record-type
   (ndarray make-ndarray* ndarray?)
