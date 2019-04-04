@@ -8,9 +8,11 @@
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     stride-c stride-f
-    make-dope dope? dope-stride dope-shape dope-size dope-scale dope-index
-    make-ndarray ndarray?  ; TODO Expose fewer details
-    ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector)
+    make-dope dope? dope-stride dope-shape
+    dope-size dope-scale dope-index
+    make-ndarray ndarray?
+    ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
+    ndarray-ref)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
@@ -143,6 +145,14 @@
   (let* ((itemsize (dtype-itemsize dtype))
          (rescaled (dope-scale dope itemsize)))
     (make-ndarray* dtype rescaled 0 (make-bytevector (dope-size rescaled)))))
+
+(define (ndarray-ref ndarray . indices)
+  ((dtype-ref (ndarray-dtype ndarray))
+   (ndarray-bytevector ndarray)
+   (dope-index
+     (ndarray-dope ndarray)
+     (ndarray-offset ndarray)
+     indices)))
 
 ; TODO Generic getter
 ; TODO Generic setter
