@@ -146,6 +146,7 @@
          (rescaled (dope-scale dope itemsize)))
     (make-ndarray* dtype rescaled 0 (make-bytevector (dope-size rescaled)))))
 
+; Retrieve the scalar entry at the given index
 (define (ndarray-ref ndarray . indices)
   ((dtype-ref
      (ndarray-dtype ndarray))
