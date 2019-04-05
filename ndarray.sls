@@ -3,6 +3,7 @@
 ;; SPDX-License-Identifier: MIT
 #!r6rs
 
+; TODO Revisit assert vs error handling
 (library (ndarray)
   (export
     make-dtype dtype?
