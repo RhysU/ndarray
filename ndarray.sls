@@ -168,8 +168,8 @@
      dope-index
      (ndarray-dope ndarray)
      (ndarray-offset ndarray)
-     indices))
-  scalar)
+     indices)
+   scalar))
 
 ; TODO Generic getter
 ; TODO Generic setter
