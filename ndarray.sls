@@ -153,7 +153,8 @@
   ((dtype-ref
      (ndarray-dtype ndarray))
    (ndarray-bytevector ndarray)
-   (dope-index
+   (apply
+     dope-index
      (ndarray-dope ndarray)
      (ndarray-offset ndarray)
      indices)))
@@ -163,7 +164,8 @@
   ((dtype-set!
      (ndarray-dtype ndarray))
    (ndarray-bytevector ndarray)
-   (dope-index
+   (apply
+     dope-index
      (ndarray-dope ndarray)
      (ndarray-offset ndarray)
      indices))
