@@ -172,7 +172,5 @@
      indices)
    scalar))
 
-; TODO Generic getter
-; TODO Generic setter
 ; TODO Mutable subsets of existing ndarrays
 )
