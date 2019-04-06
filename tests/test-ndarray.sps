@@ -42,4 +42,27 @@
   (test-equal (* 2 3 6 4) (bytevector-length (ndarray-bytevector x))))
 (test-end)
 
+; Confirm simple set/get works for various known dtypes
+(for-each
+  (lambda (under-test)
+    (test-begin (string-append "read/write:" (dtype-descr under-test)))
+    (let* ((dope (make-dope stride-c `(2 3)))
+           (x (make-ndarray under-test dope)))
+      (ndarray-set! x 19 0 2)
+      (ndarray-set! x 31 1 2)
+      (ndarray-set! x 29 1 1)
+      (ndarray-set! x 23 1 0)
+      (ndarray-set! x 17 0 1)
+      (ndarray-set! x 13 0 0)
+      (test-equal 17 (ndarray-ref x 0 1))
+      (test-equal 29 (ndarray-ref x 1 1))
+      (test-equal 31 (ndarray-ref x 1 2))
+      (test-equal 13 (ndarray-ref x 0 0))
+      (test-equal 23 (ndarray-ref x 1 0))
+      (test-equal 19 (ndarray-ref x 0 2)))
+    (test-end))
+  (list
+    dtype-s8 dtype-s16 dtype-s32 dtype-s64
+    dtype-u8 dtype-u16 dtype-u32 dtype-u64))
+
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
