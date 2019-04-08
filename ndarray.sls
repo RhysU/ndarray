@@ -10,6 +10,7 @@
     dtype-descr dtype-itemsize dtype-alignment dtype-ref dtype-set!
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
+    dtype-f32 dtype-f64
     stride-c stride-f
     make-dope dope? dope-stride dope-shape
     dope-size dope-scale dope-index

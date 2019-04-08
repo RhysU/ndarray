@@ -42,7 +42,7 @@
   (test-equal (* 2 3 6 4) (bytevector-length (ndarray-bytevector x))))
 (test-end)
 
-; Confirm simple ref/set! works for various known dtypes and strides
+; Confirm simple ref/set! works for various integer dtypes and strides
 (for-each
   (lambda (under-test)
     (test-begin (string-append "read/write:" (dtype-descr under-test)))
@@ -76,5 +76,40 @@
   (list
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
     dtype-u8 dtype-u16 dtype-u32 dtype-u64))
+
+; TODO Unify these floating point tests, which differ only in the equal check
+; Confirm simple ref/set! works for various float dtypes and strides
+(for-each
+  (lambda (under-test)
+    (test-begin (string-append "read/write:" (dtype-descr under-test)))
+    (let ((c (make-ndarray under-test (make-dope stride-c `(2 3))))
+          (f (make-ndarray under-test (make-dope stride-f `(2 3)))))
+      (ndarray-set! f 31 1 2)
+      (ndarray-set! c 19 0 2)
+      (ndarray-set! f 13 0 0)
+      (ndarray-set! c 29 1 1)
+      (ndarray-set! f 17 0 1)
+      (ndarray-set! f 19 0 2)
+      (ndarray-set! c 23 1 0)
+      (ndarray-set! c 17 0 1)
+      (ndarray-set! f 23 1 0)
+      (ndarray-set! c 31 1 2)
+      (ndarray-set! f 29 1 1)
+      (ndarray-set! c 13 0 0)
+      (test-equal 31.0 (ndarray-ref f 1 2))
+      (test-equal 23.0 (ndarray-ref f 1 0))
+      (test-equal 29.0 (ndarray-ref c 1 1))
+      (test-equal 17.0 (ndarray-ref f 0 1))
+      (test-equal 31.0 (ndarray-ref c 1 2))
+      (test-equal 17.0 (ndarray-ref c 0 1))
+      (test-equal 29.0 (ndarray-ref f 1 1))
+      (test-equal 13.0 (ndarray-ref f 0 0))
+      (test-equal 23.0 (ndarray-ref c 1 0))
+      (test-equal 13.0 (ndarray-ref c 0 0))
+      (test-equal 19.0 (ndarray-ref c 0 2))
+      (test-equal 19.0 (ndarray-ref f 0 2)))
+    (test-end))
+  (list
+    dtype-f32 dtype-f64))
 
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
