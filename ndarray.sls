@@ -6,7 +6,6 @@
 ; TODO Revisit assert vs error handling
 (library (ndarray)
   (export
-    slice make-slice slice-start slice-stop slice-step
     make-dtype dtype?
     dtype-descr dtype-itemsize dtype-alignment dtype-ref dtype-set!
     dtype-s8 dtype-s16 dtype-s32 dtype-s64
@@ -17,38 +16,9 @@
     dope-size dope-scale dope-index
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
-    ndarray-ref ndarray-set!)
+    ndarray-ref ndarray-set!
+    slice make-slice slice-start slice-stop slice-step)
   (import (rnrs))
-
-; Akin to https://docs.python.org/3.6/library/functions.html#slice,
-; with #f used where Python would choose None.  Value stop is exclusive.
-(define-record-type
-  (slice make-slice* slice?)
-  (fields (immutable start)
-          (immutable stop)
-          (immutable step))
-  (opaque #f)
-  (sealed #t)
-  (nongenerative))
-
-; Construct slices with various settings
-(define make-slice
-  (let ((valid? (lambda (x) (or (number? x) (eq? x #f)))))
-    (case-lambda
-      (()
-       (make-slice* 0 #f 1))
-      ((start)
-       (assert (valid? start))
-       (make-slice* start #f 1))
-      ((start stop)
-       (assert (valid? start))
-       (assert (valid? stop))
-       (make-slice* start stop 1))
-      ((start stop step)
-       (assert (valid? start))
-       (assert (valid? stop))
-       (assert (valid? step))
-       (make-slice* start stop step)))))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
 ; In particular, 'descr' follows NumPy conventions.
@@ -205,6 +175,36 @@
      indices)
    scalar)
   ndarray)
+
+; Akin to https://docs.python.org/3.6/library/functions.html#slice,
+; with #f used where Python would choose None.  Value stop is exclusive.
+(define-record-type
+  (slice make-slice* slice?)
+  (fields (immutable start)
+          (immutable stop)
+          (immutable step))
+  (opaque #f)
+  (sealed #t)
+  (nongenerative))
+
+; Construct slices with various settings
+(define make-slice
+  (let ((valid? (lambda (x) (or (number? x) (eq? x #f)))))
+    (case-lambda
+      (()
+       (make-slice* 0 #f 1))
+      ((start)
+       (assert (valid? start))
+       (make-slice* start #f 1))
+      ((start stop)
+       (assert (valid? start))
+       (assert (valid? stop))
+       (make-slice* start stop 1))
+      ((start stop step)
+       (assert (valid? start))
+       (assert (valid? stop))
+       (assert (valid? step))
+       (make-slice* start stop step)))))
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
