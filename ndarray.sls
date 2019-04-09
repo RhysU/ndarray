@@ -161,7 +161,7 @@
      (ndarray-offset ndarray)
      indices)))
 
-; Set the given index to the provided scalar value
+; Set the given index to the provided scalar value *returning the ndarray*
 (define (ndarray-set! ndarray scalar . indices)
   ((dtype-set!
      (ndarray-dtype ndarray))
@@ -171,7 +171,8 @@
      (ndarray-dope ndarray)
      (ndarray-offset ndarray)
      indices)
-   scalar))
+   scalar)
+  ndarray)
 
 ; TODO Mutable subsets of existing ndarrays
 )
