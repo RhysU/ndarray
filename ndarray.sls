@@ -189,21 +189,21 @@
 
 ; Construct slices with various settings
 (define make-slice
-  (let ((valid? (lambda (x) (or (number? x) (eq? x #f)))))
+  (let ((start-or-stop? (lambda (x) (or (number? x) (eq? x #f)))))
     (case-lambda
       (()
        (make-slice* 0 #f 1))
       ((start)
-       (assert (valid? start))
+       (assert (start-or-stop? start))
        (make-slice* start #f 1))
       ((start stop)
-       (assert (valid? start))
-       (assert (valid? stop))
+       (assert (start-or-stop? start))
+       (assert (start-or-stop? stop))
        (make-slice* start stop 1))
       ((start stop step)
-       (assert (valid? start))
-       (assert (valid? stop))
-       (assert (valid? step))
+       (assert (start-or-stop? start))
+       (assert (start-or-stop? stop))
+       (assert (number? step))
        (make-slice* start stop step)))))
 
 ; TODO Mutable subsets of existing ndarrays
