@@ -175,4 +175,17 @@
   ndarray)
 
 ; TODO Mutable subsets of existing ndarrays
+; TODO ndarray-copy
+; TODO ndarray-fill!
+; TODO ndarray-flatten
+; TODO ndarray-like
+; TODO ndarray-ravel
+; TODO ndarray-repeat
+; TODO ndarray-reshape
+; TODO ndarray-resize
+; TODO ndarray-squeeze
+; TODO ndarray-swapaxes
+; TODO ndarray-transpose
+; TODO ndarray-view
+; TODO Printed output
 )
