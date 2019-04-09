@@ -95,7 +95,7 @@
     (assert (= (vector-length shape*) (vector-length stride*)))
     (make-dope* stride* shape*)))
 
-; What is the rank of a dope vector?  That is, then number of dimensions.
+; What is the rank of a dope vector?  That is, the number of dimensions.
 (define (dope-rank dope)
   (vector-length (dope-shape dope)))
 
