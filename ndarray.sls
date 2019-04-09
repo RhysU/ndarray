@@ -146,6 +146,7 @@
 
 ; Construct an uninitialized ndarray with the given dtype and dope
 (define (make-ndarray dtype dope)
+  (assert (dtype? dtype))
   (let* ((itemsize (dtype-itemsize dtype))
          (rescaled (dope-scale dope itemsize)))
     (make-ndarray* dtype rescaled 0 (make-bytevector (dope-size rescaled)))))
