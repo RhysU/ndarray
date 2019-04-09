@@ -31,7 +31,7 @@
   (sealed #t)
   (nongenerative))
 
-; Construct
+; Construct slices with various settings
 (define make-slice
   (let ((valid? (lambda (x) (or (number? x) (eq? x #f)))))
     (case-lambda
