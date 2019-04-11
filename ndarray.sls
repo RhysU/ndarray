@@ -192,7 +192,7 @@
   (let ((start-or-stop? (lambda (x) (or (number? x) (eq? x #f)))))
     (case-lambda
       (()
-       (make-slice* 0 #f 1))
+       (make-slice* #f #f 1))
       ((start)
        (assert (start-or-stop? start))
        (make-slice* start #f 1))
@@ -205,6 +205,23 @@
        (assert (start-or-stop? stop))
        (assert (number? step))
        (make-slice* start stop step)))))
+
+; TODO Rip this out as I displie the approach
+; Replace #f or negative indices with concrete values relative to extent
+(define (slice-normalize slice extent)
+  (let ((start (slice-start slice))
+        (stop (slice-stop slice))
+        (step (slice-step slice)))
+    (make-slice*
+      (cond
+        ((not start) 0)
+        ((negative? start) (+ extent start))
+        (else start))
+      (cond
+        ((not stop) 0)
+        ((negative? stop) (+ extent stop))
+        (else stop))
+      step)))
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
