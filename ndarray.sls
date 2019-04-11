@@ -117,6 +117,7 @@
       (dope-stride dope))
     (dope-shape dope)))
 
+; TODO Permit negative indices per NumPy semantics
 ; Compute offset for some (i, j, ...) based upon dope-vector strides
 (define (dope-index dope offset . indices)
   (let ((stride (dope-stride dope))
