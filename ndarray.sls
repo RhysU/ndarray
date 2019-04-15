@@ -117,8 +117,8 @@
       (dope-stride dope))
     (dope-shape dope)))
 
-; TODO Permit negative indices per NumPy semantics
-; Compute offset for some (i, j, ...) based upon dope-vector strides
+; Compute offset for some (i, j, ...) based upon dope-vector strides.
+; Allows NumPy-style negative indices, where i < 0 selects i + extent.
 (define (dope-index dope offset . indices)
   (let ((stride (dope-stride dope))
         (shape (dope-shape dope)))
@@ -129,8 +129,13 @@
         (begin
           (assert (= k (vector-length stride)))
           offset)
-        (let ((i (car indices)))
-          (assert (< i (vector-ref shape k)))
+        (let ((extent (vector-ref shape k))
+              (i (car indices)))
+          (if (>= i 0)
+            (assert (< i extent))
+            (begin
+              (assert (>= i (- extent)))
+              (set! i (+ i extent))))
           (loop (+ k 1)
                 (cdr indices)
                 (+ offset (* i (vector-ref stride k)))))))))
