@@ -232,6 +232,7 @@
 ; Retrieve well-formed, positive start *in context of* given extent.
 ; In particular, handles #f default as well as negative strides.
 (define (slice-start slice extent)
+  (assert (not (negative? extent)))
   (let ((start (slice-start* slice))
         (step (slice-step* slice)))
     (cond
@@ -247,6 +248,7 @@
 
 ; FIXME CHECK
 (define (slice-stop slice extent)
+  (assert (not (negative? extent)))
   (let ((stop (slice-stop* slice))
         (step (slice-step* slice)))
     (cond
