@@ -97,4 +97,14 @@
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     dtype-f32 dtype-f64))
 
+(test-begin "slice-step")
+(test-eq +2 (slice-step (make-slice 0 10 +2) 555))
+(test-eq +1 (slice-step (make-slice 0 10 +1) 555))
+(test-eq -1 (slice-step (make-slice 0 10 -1) 555))
+(test-eq -2 (slice-step (make-slice 0 10 -2) 555))
+(test-eq +1 (slice-step (make-slice 0 10) 555))
+(test-eq +1 (slice-step (make-slice 0) 555))
+(test-eq +1 (slice-step (make-slice) 555))
+(test-end)
+
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
