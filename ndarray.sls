@@ -17,7 +17,7 @@
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
     ndarray-ref ndarray-set!
-    slice make-slice slice-start* slice-stop* slice-step*
+    slice make-slice slice-start slice-stop slice-step
     slice->list slice->vector)
   (import (rnrs))
 
@@ -259,6 +259,13 @@
          extent
          (+ extent stop)))
       (else stop))))
+
+; FIXME CHECK
+(define (slice-step slice extent)
+  (let ((step (slice-step* slice)))
+    (if (not step)
+      1
+      step)))
 
 ; TODO Testing very much remains
 ; Replace #f or negative indices with concrete values relative to extent.
