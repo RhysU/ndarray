@@ -260,7 +260,6 @@
          (+ extent stop)))
       (else stop))))
 
-; FIXME CHECK
 (define (slice-step slice extent)
   (let ((step (slice-step* slice)))
     (if (not step)
