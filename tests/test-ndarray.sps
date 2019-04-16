@@ -107,4 +107,17 @@
 (test-eq +1 (slice-step (make-slice) 555))
 (test-end)
 
+(test-begin "slice-start")
+(test-eq +0 (slice-start (make-slice 0 10 +2) 555))
+(test-eq +1 (slice-start (make-slice 1 10 +1) 555))
+(test-eq +2 (slice-start (make-slice 2 10 -1) 555))
+(test-eq +0 (slice-start (make-slice 0 10) 555))
+(test-eq +1 (slice-start (make-slice 1 10) 555))
+(test-eq +2 (slice-start (make-slice 2 10) 555))
+(test-eq +0 (slice-start (make-slice 0) 555))
+(test-eq +1 (slice-start (make-slice 1) 555))
+(test-eq +2 (slice-start (make-slice 2) 555))
+(test-eq +0 (slice-start (make-slice) 555))
+(test-end)
+
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
