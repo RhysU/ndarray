@@ -17,7 +17,8 @@
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
     ndarray-ref ndarray-set!
-    slice make-slice slice-start slice-stop slice-step)
+    slice make-slice slice-start slice-stop slice-step
+    slice->list slice->vector)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
@@ -192,6 +193,19 @@
   (opaque #f)
   (sealed #t)
   (nongenerative))
+
+(define (slice->list slice)
+  (let ((x (make-vector 3)))
+    (vector-set! x 0 (slice-start slice))
+    (vector-set! x 1 (slice-stop slice))
+    (vector-set! x 2 (slice-step slice))
+    x))
+
+(define (slice->vector slice)
+  (list
+    (slice-start slice)
+    (slice-stop slice)
+    (slice-step slice)))
 
 ; Construct slices with various settings
 (define make-slice
