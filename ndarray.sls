@@ -226,6 +226,7 @@
        (assert (number? step))
        (make-slice* start stop step)))))
 
+; TODO Testing very much remains
 ; Replace #f or negative indices with concrete values relative to extent.
 ; Must be wholistic across start/stop/step as some default have cross-talk.
 ; Follows https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html.
