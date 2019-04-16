@@ -212,20 +212,25 @@
        (assert (number? step))
        (make-slice* start stop step)))))
 
-; TODO Rip this out as I displie the approach
-; Replace #f or negative indices with concrete values relative to extent
+; Replace #f or negative indices with concrete values relative to extent.
+; Must be wholistic across start/stop/step as some default have cross-talk.
+; Follows https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html.
 (define (slice-normalize slice extent)
   (let ((start (slice-start slice))
         (stop (slice-stop slice))
         (step (slice-step slice)))
     (make-slice*
       (cond
-        ((not start) 0)
-        ((negative? start) (+ extent start))
+        ((not start)
+         (if (positive? step) 0 (- extent 1)))
+        ((negative? start)
+         (max 0 (+ extent start)))
         (else start))
       (cond
-        ((not stop) 0)
-        ((negative? stop) (+ extent stop))
+        ((not stop)
+         (if (positive? step) extent 0))
+        ((negative? stop)
+         (min extent (+ extent stop)))
         (else stop))
       step)))
 
