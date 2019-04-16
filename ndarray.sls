@@ -194,6 +194,7 @@
   (sealed #t)
   (nongenerative))
 
+; TODO Needed?
 (define (slice->list slice)
   (let ((x (make-vector 3)))
     (vector-set! x 0 (slice-start* slice))
@@ -201,6 +202,7 @@
     (vector-set! x 2 (slice-step* slice))
     x))
 
+; TODO Needed?
 (define (slice->vector slice)
   (list
     (slice-start* slice)
@@ -225,6 +227,38 @@
        (assert (start-or-stop? stop))
        (assert (number? step))
        (make-slice* start stop step)))))
+
+; FIXME CHECK
+; Retrieve well-formed, positive start *in context of* given extent.
+; In particular, handles #f default as well as negative strides.
+(define (slice-start slice extent)
+  (let ((start (slice-start* slice))
+        (step (slice-step* slice)))
+    (cond
+      ((not start)
+       (if (positive? step)
+         0
+         (- extent 1)))
+      ((negative? start)
+       (max
+         0
+         (+ extent start)))
+      (else start))))
+
+; FIXME CHECK
+(define (slice-stop slice extent)
+  (let ((stop (slice-stop* slice))
+        (step (slice-step* slice)))
+    (cond
+      ((not stop)
+       (if (positive? step)
+         extent
+         -1))
+      ((negative? stop)
+       (min
+         extent
+         (+ extent stop)))
+      (else stop))))
 
 ; TODO Testing very much remains
 ; Replace #f or negative indices with concrete values relative to extent.
