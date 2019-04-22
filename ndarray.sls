@@ -17,7 +17,8 @@
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
     ndarray-ref ndarray-set!
-    slice make-slice slice-start slice-stop slice-step)
+    slice make-slice slice-start slice-stop slice-step
+    sliver make-sliver sliver-start sliver-stop sliver-step)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
@@ -225,7 +226,7 @@
   (nongenerative))
 
 ; Given a slice, possibly with defaults or negative strides,
-; specialize a sliver to be well-formed with respect to extent.
+; specialize a sliver to be well-formed with respect to some extent.
 (define (make-sliver slice extent)
   (assert (slice? slice))
   (assert (integer? extent))
@@ -251,14 +252,14 @@
       (if negative-step
         ; ...with -1 <= stop <= start < extent for negative steps and
         (begin
+          (set! stop (max stop -1))
           (set! start (min start extent-minus-1))
-          (set! stop (min stop start))
-          (set! stop (max start -1)))
-        ; ...with 0 <= start <= stop < extent for positive steps.
+          (set! start (max start stop)))
+        ; ...with 0 <= start <= stop <= extent for positive steps.
         (begin
-          (set! stop (min stop extent-minus-1))
-          (set! start (min start stop))
-          (set! start (max start 0))))
+          (set! start (max start 0))
+          (set! stop (min stop extent))
+          (set! stop (max stop start))))
       (make-sliver* start stop step))))
 
 ; TODO Mutable subsets of existing ndarrays
