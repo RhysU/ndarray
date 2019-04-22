@@ -254,7 +254,7 @@
         (begin
           (set! stop (max stop -1))
           (set! start (min start extent-minus-1))
-          (set! start (max start stop)))
+          (set! stop (min stop start)))
         ; ...with 0 <= start <= stop <= extent for positive steps.
         (begin
           (set! start (max start 0))
