@@ -186,9 +186,9 @@
 ; with #f used where Python would choose None.  Value stop is exclusive.
 (define-record-type
   (slice make-slice* slice?)
-  (fields (immutable start slice-start*)
-          (immutable stop slice-stop*)
-          (immutable step slice-step*))
+  (fields (immutable start slice-start)
+          (immutable stop slice-stop)
+          (immutable step slice-step))
   (opaque #f)
   (sealed #t)
   (nongenerative))
@@ -212,68 +212,14 @@
        (assert (number? step))
        (make-slice* start stop step)))))
 
-; FIXME CHECK
 ; Retrieve well-formed, positive start *in context of* given extent.
 ; In particular, handles #f default as well as negative strides.
-(define (slice-start slice extent)
-  (assert (not (negative? extent)))
-  (let ((start (slice-start* slice))
-        (step (slice-step* slice)))
-    (cond
-      ((not start)
-       (if (positive? step)
-         0
-         (- extent 1)))
-      ((negative? start)
-       (max
-         0
-         (+ extent start)))
-      (else start))))
+; TODO
 
-; FIXME CHECK
-(define (slice-stop slice extent)
-  (assert (not (negative? extent)))
-  (let ((stop (slice-stop* slice))
-        (step (slice-step* slice)))
-    (cond
-      ((not stop)
-       (if (positive? step)
-         extent
-         -1))
-      ((negative? stop)
-       (min
-         extent
-         (+ extent stop)))
-      (else stop))))
-
-(define (slice-step slice extent)
-  (let ((step (slice-step* slice)))
-    (if (not step)
-      1
-      step)))
-
-; TODO Testing very much remains
 ; Replace #f or negative indices with concrete values relative to extent.
 ; Must be wholistic across start/stop/step as some default have cross-talk.
 ; Follows https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html.
-(define (slice-normalize slice extent)
-  (let ((start (slice-start* slice))
-        (stop (slice-stop* slice))
-        (step (slice-step* slice)))
-    (make-slice*
-      (cond
-        ((not start)
-         (if (positive? step) 0 (- extent 1)))
-        ((negative? start)
-         (max 0 (+ extent start)))
-        (else start))
-      (cond
-        ((not stop)
-         (if (positive? step) extent 0))
-        ((negative? stop)
-         (min extent (+ extent stop)))
-        (else stop))
-      step)))
+; TODO
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
