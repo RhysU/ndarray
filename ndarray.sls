@@ -184,18 +184,19 @@
 
 ; Akin to https://docs.python.org/3.6/library/functions.html#slice,
 ; with #f used where Python would choose None.  Value stop is exclusive.
+; Allows NumPy-style negative indices, where i < 0 implies i + extent.
 (define-record-type
   (slice make-slice* slice?)
-  (fields (immutable start slice-start)
-          (immutable stop slice-stop)
-          (immutable step slice-step))
+  (fields (immutable start)
+          (immutable stop)
+          (immutable step))
   (opaque #f)
   (sealed #t)
   (nongenerative))
 
 ; Construct slices with various settings
 (define make-slice
-  (let ((start-or-stop? (lambda (x) (or (number? x) (eq? x #f)))))
+  (let ((start-or-stop? (lambda (x) (or (integer? x) (eq? x #f)))))
     (case-lambda
       (()
        (make-slice* #f #f 1))
@@ -209,8 +210,28 @@
       ((start stop step)
        (assert (start-or-stop? start))
        (assert (start-or-stop? stop))
-       (assert (number? step))
+       (assert (integer? step))
        (make-slice* start stop step)))))
+
+; A slice specialized to some fixed extent, which permits
+; eliminating all #f defaults as well as negative indexing.
+(define-record-type
+  (sliver make-sliver* sliver?)
+  (fields (immutable start)
+          (immutable stop)
+          (immutable step))
+  (opaque #f)
+  (sealed #t)
+  (nongenerative))
+
+(define (make-sliver slice extent)
+  (assert (slice? slice))
+  (assert (integer? extent))
+  (assert (not (negative? extent)))
+  (let ((start (slice-start slice))
+        (stop (slice-stop slice))
+        (step (slice-stop slice)))
+    #f))
 
 ; Retrieve well-formed, positive start *in context of* given extent.
 ; In particular, handles #f default as well as negative strides.
