@@ -199,14 +199,14 @@
   (let ((start-or-stop? (lambda (x) (or (integer? x) (eq? x #f)))))
     (case-lambda
       (()
-       (make-slice* #f #f 1))
+       (make-slice* #f #f #f))
       ((start)
        (assert (start-or-stop? start))
-       (make-slice* start #f 1))
+       (make-slice* start #f #f))
       ((start stop)
        (assert (start-or-stop? start))
        (assert (start-or-stop? stop))
-       (make-slice* start stop 1))
+       (make-slice* start stop #f))
       ((start stop step)
        (assert (start-or-stop? start))
        (assert (start-or-stop? stop))
@@ -224,23 +224,42 @@
   (sealed #t)
   (nongenerative))
 
+; Given a slice, possibly with defaults or negative strides,
+; specialize a sliver to be well-formed with respect to extent.
 (define (make-sliver slice extent)
   (assert (slice? slice))
   (assert (integer? extent))
   (assert (not (negative? extent)))
   (let ((start (slice-start slice))
         (stop (slice-stop slice))
-        (step (slice-stop slice)))
-    #f))
-
-; Retrieve well-formed, positive start *in context of* given extent.
-; In particular, handles #f default as well as negative strides.
-; TODO
-
-; Replace #f or negative indices with concrete values relative to extent.
-; Must be wholistic across start/stop/step as some default have cross-talk.
-; Follows https://docs.scipy.org/doc/numpy/reference/arrays.indexing.html.
-; TODO
+        (step (slice-step slice)))
+    ; Handle default step
+    (when (not step)
+      (set! step 1))
+    (let ((negative-step (negative? step))
+          (extent-minus-1 (- extent 1)))
+      ; Handle default start/stop and account for negative start/stop/step
+      (set! start (cond
+                    ((not start) (if negative-step extent-minus-1 0))
+                    ((negative? start) (+ extent start))
+                    (else start)))
+      (set! stop (cond
+                   ((not stop) (if negative-step -1 extent))
+                   ((negative? stop) (+ extent stop))
+                   (else stop)))
+      ; Coerce start/stop to have minimum range relative to extent...
+      (if negative-step
+        ; ...with -1 <= stop <= start < extent for negative steps and
+        (begin
+          (set! start (min start extent-minus-1))
+          (set! stop (min stop start))
+          (set! stop (max start -1)))
+        ; ...with 0 <= start <= stop < extent for positive steps.
+        (begin
+          (set! stop (min stop extent-minus-1))
+          (set! start (min start stop))
+          (set! start (max start 0))))
+      (make-sliver* start stop step))))
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
