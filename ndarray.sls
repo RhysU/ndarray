@@ -252,13 +252,12 @@
                    ((not stop) (if negative-step -1 extent))
                    ((negative? stop) (+ extent stop))
                    (else stop)))
-      ; Coerce start/stop to have minimum range relative to extent...
+      ; Coerce start/stop to be anchored at start and clipped to extent.
+      ; Not strictly necessary, but provides uniformity to other logic.
       (if negative-step
-        ; ...with -1 <= stop <= start < extent for negative steps and
         (begin
           (set! start (clamp 0 start extent-minus-1))
           (set! stop (clamp -1 stop start)))
-        ; ...with 0 <= start <= stop <= extent for positive steps.
         (begin
           (set! start (clamp 0 start extent))
           (set! stop (clamp start stop extent))))
