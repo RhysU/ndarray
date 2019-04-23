@@ -238,7 +238,8 @@
     (when (not step)
       (set! step 1))
     (let ((negative-step (negative? step))
-          (extent-minus-1 (- extent 1)))
+          (extent-minus-1 (- extent 1))
+          (clamp (lambda (a b c) (max a (min b c)))))
       ; Handle default start/stop and account for negative start/stop/step
       (set! start (cond
                     ((not start) (if negative-step extent-minus-1 0))
@@ -252,12 +253,12 @@
       (if negative-step
         ; ...with -1 <= stop <= start < extent for negative steps and
         (begin
-          (set! start (max (min start extent-minus-1) 0))
-          (set! stop (min (max stop -1) start)))
+          (set! start (clamp 0 start extent-minus-1))
+          (set! stop (clamp -1 stop start)))
         ; ...with 0 <= start <= stop <= extent for positive steps.
         (begin
-          (set! start (min (max start 0) extent))
-          (set! stop (max (min stop extent) start))))
+          (set! start (clamp 0 start extent))
+          (set! stop (clamp start stop extent))))
       (make-sliver* start stop step))))
 
 ; TODO Mutable subsets of existing ndarrays
