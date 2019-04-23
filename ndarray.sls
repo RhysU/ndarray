@@ -252,14 +252,12 @@
       (if negative-step
         ; ...with -1 <= stop <= start < extent for negative steps and
         (begin
-          (set! stop (max stop -1))
-          (set! start (min start extent-minus-1))
-          (set! stop (min stop start)))
+          (set! start (max (min start extent-minus-1) 0))
+          (set! stop (min (max stop -1) start)))
         ; ...with 0 <= start <= stop <= extent for positive steps.
         (begin
-          (set! start (max start 0))
-          (set! stop (min stop extent))
-          (set! stop (max stop start))))
+          (set! start (min (max start 0) extent))
+          (set! stop (max (min stop extent) start))))
       (make-sliver* start stop step))))
 
 ; TODO Mutable subsets of existing ndarrays
