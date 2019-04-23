@@ -225,6 +225,10 @@
   (sealed #t)
   (nongenerative))
 
+; Clamp b to lie within closed interval [a, c].
+(define (clamp a b c)
+  (max a (min b c)))
+
 ; Given a slice, possibly with defaults or negative strides,
 ; specialize a sliver to be well-formed with respect to some extent.
 (define (make-sliver slice extent)
@@ -238,8 +242,7 @@
     (when (not step)
       (set! step 1))
     (let ((negative-step (negative? step))
-          (extent-minus-1 (- extent 1))
-          (clamp (lambda (a b c) (max a (min b c)))))
+          (extent-minus-1 (- extent 1)))
       ; Handle default start/stop and account for negative start/stop/step
       (set! start (cond
                     ((not start) (if negative-step extent-minus-1 0))
