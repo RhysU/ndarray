@@ -17,8 +17,9 @@
     make-ndarray ndarray?
     ndarray-dtype ndarray-dope ndarray-offset ndarray-bytevector
     ndarray-ref ndarray-set!
-    slice make-slice slice-start slice-stop slice-step
-    sliver make-sliver sliver-start sliver-stop sliver-step)
+    slice slice? make-slice slice-start slice-stop slice-step
+    sliver sliver? make-sliver sliver-start sliver-stop sliver-step
+    make-slivers)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
@@ -262,6 +263,27 @@
           (set! start (clamp 0 start extent))
           (set! stop (clamp start stop extent))))
       (make-sliver* start stop step))))
+
+; TODO Insufficient slices cause padding with (make-slice)
+; Convert list-of-(slices/indices) to list-of-(slivers/indices)
+(define (make-slivers dope . slices)
+  (let ((shape (dope-shape dope)))
+    (let loop ((k 0) (xs slices) (as `()))
+      (if (pair? xs)
+        (let* ((extent (vector-ref shape k))
+               (x (car xs))
+               (a (cond ((slice? x) (make-sliver x extent))
+                        ((integer? x) (begin (assert (< x extent)) x))
+                        (else (assert #f)))))
+          (loop (+ k 1) (cdr xs) (cons a as)))
+        (begin
+          (assert (= k (dope-rank dope)))
+          (reverse as))))))
+
+; TODO
+; Produce of view of the ndarray per a sequence of slices
+(define (ndarray-view ndarray . slices)
+  #f)
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
