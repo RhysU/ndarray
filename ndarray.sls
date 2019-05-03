@@ -265,6 +265,7 @@
       (make-sliver* start stop step))))
 
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
+; Any unspecified slices effectively default to (make-slice)
 (define (make-slivers dope . slices)
   (let ((rank (dope-rank dope))
         (shape (dope-shape dope)))
