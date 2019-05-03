@@ -264,7 +264,6 @@
           (set! stop (clamp start stop extent))))
       (make-sliver* start stop step))))
 
-; TODO Correct insufficient number of slices handling
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
 (define (make-slivers dope . slices)
   (let ((rank (dope-rank dope))
@@ -276,7 +275,7 @@
           (reverse as))
         (let ((extent (vector-ref shape k)))
           (if (null? xs)
-            (loop (+ k 1) xs (cons (make-sliver* 0 extent 1) xs))
+            (loop (+ k 1) xs (cons (make-sliver* 0 extent 1) as))
             (let* ((x (car xs))
                    (a (cond ((slice? x) (make-sliver x extent))
                             ((integer? x) (begin (assert (< x extent)) x))
