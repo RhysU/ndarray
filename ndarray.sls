@@ -264,23 +264,26 @@
           (set! stop (clamp start stop extent))))
       (make-sliver* start stop step))))
 
-; TODO Insufficient slices cause padding with (make-slice)
+; TODO Correct insufficient number of slices handling
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
 (define (make-slivers dope . slices)
-  (let ((shape (dope-shape dope)))
+  (let ((rank (dope-rank dope))
+        (shape (dope-shape dope)))
     (let loop ((k 0) (xs slices) (as `()))
-      (if (pair? xs)
-        (let ((extent (vector-ref shape k))
-              (x (car xs)))
-          (let ((a (cond ((slice? x) (make-sliver x extent))
-                         ((integer? x) (begin (assert (< x extent)) x))
-                         (else (assert #f)))))
-            (loop (+ k 1) (cdr xs) (cons a as))))
+      (if (= k rank)
         (begin
-          (assert (= k (dope-rank dope)))
-          (reverse as))))))
+          (assert (null? xs))
+          (reverse as))
+        (let ((extent (vector-ref shape k)))
+          (if (null? xs)
+            (loop (+ k 1) xs (cons (make-sliver* 0 extent 1) xs))
+            (let* ((x (car xs))
+                   (a (cond ((slice? x) (make-sliver x extent))
+                            ((integer? x) (begin (assert (< x extent)) x))
+                            (else (assert #f)))))
+              (loop (+ k 1) (cdr xs) (cons a as)))))))))
 
-; TODO
+; TODO Implement
 ; Produce of view of the ndarray per a sequence of slices
 (define (ndarray-view ndarray . slices)
   #f)
