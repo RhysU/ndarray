@@ -226,11 +226,14 @@
   (sealed #t)
   (nongenerative))
 
-; FIXME Is wrong
+; FIXME Broken in the negative case
+; How many addressable values are accessible for some sliver?
 (define (sliver-extent sliver)
-  (div (- (sliver-stop sliver)
-          (sliver-start sliver))
-       (sliver-step sliver)))
+  (let-values (((q r)
+                (div-and-mod (- (sliver-stop sliver)
+                                (sliver-start sliver))
+                             (abs (sliver-step sliver)))))
+              (if (zero? r) q (+ q 1))))
 
 ; Clamp b to lie within closed interval [a, c].
 (define (clamp a b c)
