@@ -19,7 +19,7 @@
     ndarray-ref ndarray-set!
     slice slice? make-slice slice-start slice-stop slice-step
     sliver sliver? make-sliver sliver-start sliver-stop sliver-step
-    make-slivers)
+    sliver-extent make-slivers)
   (import (rnrs))
 
 ; Akin to https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
@@ -225,6 +225,12 @@
   (opaque #f)
   (sealed #t)
   (nongenerative))
+
+; FIXME Is wrong
+(define (sliver-extent sliver)
+  (div (- (sliver-stop sliver)
+          (sliver-start sliver))
+       (sliver-step sliver)))
 
 ; Clamp b to lie within closed interval [a, c].
 (define (clamp a b c)
