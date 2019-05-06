@@ -283,10 +283,43 @@
                             (else (assert #f)))))
               (loop (+ k 1) (cdr xs) (cons a as)))))))))
 
-; TODO Implement
 ; Produce of view of the ndarray per a sequence of slices
+(define FIXME #f)
 (define (ndarray-view ndarray . slices)
-  #f)
+  (let ((dope (ndarray-dope ndarray)))
+    (let ((slivers ((apply make-slivers dope slices)))
+          (view-rank (dope-rank dope))
+          (view-starts `()))
+      ; From list-of (slivers/indices) compute rank/starts
+      (let loop ((x (car slivers)) (xs (cdr slivers)))
+        (if (integer? x)
+          (begin
+            (set! view-rank (- view-rank 1))
+            (set! view-starts (cons x view-starts)))
+          (begin
+            (set! view-starts (cons (sliver-start x) view-starts))))
+        (if (pair? xs)
+          (loop (car xs) (cdr xs))))
+      ; Compute strides/shapes in retained dimensions
+      (let ((orig-stride (dope-stride dope))
+            (view-stride (make-vector view-rank))
+            (view-shape (make-vector view-rank)))
+        (let loop ((k 0) (x (car slivers)) (xs (cdr slivers)))
+          (when (sliver? x)
+            (vector-set! view-stride k FIXME)
+            (vector-set! view-shape k FIXME)
+            (set! k (+ k 1)))
+          (if (pair? xs)
+            (loop k (car xs) (cdr xs))))
+        ; Finally construct the requested view
+        (make-ndarray*
+          (ndarray-dtype ndarray)
+          (make-dope* view-stride view-shape)
+          (apply dope-index
+                 dope
+                 (ndarray-offset ndarray)
+                 (reverse view-starts))
+          (ndarray-bytevector ndarray))))))
 
 ; TODO Mutable subsets of existing ndarrays
 ; TODO ndarray-copy
