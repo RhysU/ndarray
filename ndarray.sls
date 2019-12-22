@@ -264,6 +264,7 @@
                    (else stop)))
       ; Coerce start/stop to be anchored at start and clipped to extent.
       ; Not strictly necessary, but provides uniformity to other logic.
+      ; FIXME Appears broken for (make-sliver (make-slice 10 0 -2) 10)
       (if negative-step
         (begin
           (set! start (clamp 0 start extent-minus-1))
