@@ -226,14 +226,16 @@
   (sealed #t)
   (nongenerative))
 
-; FIXME Broken in the negative case
+; TODO Add tests for the negative cases
 ; How many addressable values are accessible for some sliver?
 (define (sliver-extent sliver)
-  (let-values (((q r)
-                (div-and-mod (- (sliver-stop sliver)
-                                (sliver-start sliver))
-                             (abs (sliver-step sliver)))))
-              (if (zero? r) q (+ q 1))))
+  (let ((start (sliver-start sliver))
+        (stop (sliver-stop sliver))
+        (step (sliver-step sliver)))
+    (div (+ (- stop start)
+            (abs step)
+            -1)
+         step)))
 
 ; Clamp b to lie within closed interval [a, c].
 (define (clamp a b c)
