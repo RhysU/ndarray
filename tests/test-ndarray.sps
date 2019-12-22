@@ -97,4 +97,23 @@
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     dtype-f32 dtype-f64))
 
+(test-begin "make-slice")
+(let ((a (make-slice)))
+    (test-assert (not (slice-start a)))
+    (test-assert (not (slice-stop a)))
+    (test-assert (not (slice-step a))))
+(let ((a (make-slice 5)))
+    (test-equal 5 (slice-start a))
+    (test-assert (not (slice-stop a)))
+    (test-assert (not (slice-step a))))
+(let ((a (make-slice 5 6)))
+    (test-equal 5 (slice-start a))
+    (test-equal 6 (slice-stop a))
+    (test-assert (not (slice-step a))))
+(let ((a (make-slice 5 6 7)))
+    (test-equal 5 (slice-start a))
+    (test-equal 6 (slice-stop a))
+    (test-equal 7 (slice-step a)))
+(test-end)
+
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
