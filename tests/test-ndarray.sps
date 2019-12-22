@@ -8,6 +8,7 @@
         (srfi :64 testing)
         (ndarray))
 
+; Column-major (aka C-order) stride computations
 (test-begin "stride-c")
 (test-equal `()       (stride-c `()))
 (test-equal `(1)      (stride-c `(2)))
@@ -25,6 +26,7 @@
   (test-equal (* 2 3 6 4) (bytevector-length (ndarray-bytevector x))))
 (test-end)
 
+; Row-major (aka Fortran-order) stride computations
 (test-begin "stride-f")
 (test-equal `()       (stride-f `()))
 (test-equal `(1)      (stride-f `(2)))
@@ -42,6 +44,9 @@
   (test-equal (* 2 3 6 4) (bytevector-length (ndarray-bytevector x))))
 (test-end)
 
+; TODO Add tests for 1-dimensional ndarrays
+; TODO Add tests for 3-dimensional ndarrays (likely with degenerate direction)
+; TODO Zero-dimensional case works as expected?
 ; Confirm simple ref/set! works for various numeric dtypes and strides
 (for-each
   (lambda (under-test)
@@ -97,6 +102,7 @@
     dtype-u8 dtype-u16 dtype-u32 dtype-u64
     dtype-f32 dtype-f64))
 
+; Slice creation with various numbers of defaults
 (test-begin "make-slice")
 (let ((a (make-slice)))
     (test-assert (not (slice-start a)))
