@@ -122,4 +122,49 @@
     (test-equal 7 (slice-step a)))
 (test-end)
 
+; Sliver extents given various slicing options
+(test-begin "sliver-extent")
+; Default start/stop has step 1
+(test-equal 4 (sliver-extent (make-sliver (make-slice) 4)))
+(test-equal 5 (sliver-extent (make-sliver (make-slice) 5)))
+; Explicit start/stop has step 1
+(test-equal 4 (sliver-extent (make-sliver (make-slice #f) 4)))
+(test-equal 5 (sliver-extent (make-sliver (make-slice #f) 5)))
+; Default stop is the extent
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5) 4)))
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5) 5)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5) 6)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5) 7)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5) 8)))
+(test-equal 4 (sliver-extent (make-sliver (make-slice 5) 9)))
+; Explicit stop is the extent
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 #f) 4)))
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 #f) 5)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5 #f) 6)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5 #f) 7)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5 #f) 8)))
+(test-equal 4 (sliver-extent (make-sliver (make-slice 5 #f) 9)))
+; Default step of 1
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8) 4)))
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8) 5)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5 8) 6)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5 8) 7)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5 8) 8)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5 8) 9)))
+; Explicit step of 1
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8 1) 4)))
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8 1) 5)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5 8 1) 6)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5 8 1) 7)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5 8 1) 8)))
+(test-equal 3 (sliver-extent (make-sliver (make-slice 5 8 1) 9)))
+; Explicit step of 2
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8 2) 4)))
+(test-equal 0 (sliver-extent (make-sliver (make-slice 5 8 2) 5)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5 8 2) 6)))
+(test-equal 1 (sliver-extent (make-sliver (make-slice 5 8 2) 7)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5 8 2) 8)))
+(test-equal 2 (sliver-extent (make-sliver (make-slice 5 8 2) 9)))
+(test-end)
+
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
