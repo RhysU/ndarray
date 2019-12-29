@@ -278,8 +278,10 @@
                            (max 0
                                 (* step (+ 1 (div (- -1 start) step))))))
             (set! stop (clamp start stop extent))))
-      ; TODO When (= start stop) should both be replaced by zero?
-      (make-sliver* start stop step))))
+      ; Empty slivers are direction-preserving half-open intervals around zero.
+      (if (= start stop)
+          (make-sliver* 0 0 (if negative-step -1 1))
+          (make-sliver* start stop step)))))
 
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
 ; Any unspecified slices effectively default to (make-slice)
