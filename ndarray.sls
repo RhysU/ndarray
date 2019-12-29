@@ -226,17 +226,6 @@
   (sealed #t)
   (nongenerative))
 
-; TODO Add tests for the negative cases
-; How many addressable values are accessible for some sliver?
-(define (sliver-extent sliver)
-  (let ((start (sliver-start sliver))
-        (stop (sliver-stop sliver))
-        (step (sliver-step sliver)))
-    (div (+ (- stop start)
-            (abs step)
-            -1)
-         step)))
-
 ; Clamp b to lie within closed interval [a, c].
 (define (clamp a b c)
   (max a (min b c)))
@@ -282,6 +271,17 @@
       (if (= start stop)
           (make-sliver* 0 0 (if negative-step -1 1))
           (make-sliver* start stop step)))))
+
+; TODO Add tests for the negative cases
+; How many addressable values are accessible for some sliver?
+(define (sliver-extent sliver)
+  (let ((start (sliver-start sliver))
+        (stop (sliver-stop sliver))
+        (step (sliver-step sliver)))
+    (div (+ (- stop start)
+            (abs step)
+            -1)
+         step)))
 
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
 ; Any unspecified slices effectively default to (make-slice)
