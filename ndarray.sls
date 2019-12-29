@@ -266,14 +266,19 @@
                    (else stop)))
       ; Coerce start/stop to be anchored at start and clipped to extent.
       ; Not strictly necessary, but provides uniformity to other logic.
-      ; FIXME Appears broken for (make-sliver (make-slice 10 0 -2) 10)
+      ; TODO Following logic feels needlessly complicated/expensive.
       (if negative-step
-        (begin
-          (set! start (clamp 0 start extent-minus-1))
-          (set! stop (clamp -1 stop start)))
-        (begin
-          (set! start (clamp 0 start extent))
-          (set! stop (clamp start stop extent))))
+          (begin
+            (set! start (+ start
+                           (min 0
+                                (* step (+ 1 (div (- extent start) step))))))
+            (set! stop (clamp -1 stop start)))
+          (begin
+            (set! start (+ start
+                           (max 0
+                                (* step (+ 1 (div (- -1 start) step))))))
+            (set! stop (clamp start stop extent))))
+      ; TODO When (= start stop) should both be replaced by zero?
       (make-sliver* start stop step))))
 
 ; Convert list-of-(slices/indices) to list-of-(slivers/indices)
