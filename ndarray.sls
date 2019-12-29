@@ -272,8 +272,8 @@
           (make-sliver* 0 0 (if negative-step -1 1))
           (make-sliver* start stop step)))))
 
-; TODO Add tests for the negative cases
 ; How many addressable values are accessible for some sliver?
+; Implementation requires the normalizations found within make-sliver.
 (define (sliver-extent sliver)
   (let ((start (sliver-start sliver))
         (stop (sliver-stop sliver))
@@ -303,6 +303,7 @@
               (loop (+ k 1) (cdr xs) (cons a as)))))))))
 
 ; Produce of view of the ndarray per a sequence of slices
+; TODO Implement
 (define FIXME #f)
 (define (ndarray-view ndarray . slices)
   (let ((dope (ndarray-dope ndarray)))

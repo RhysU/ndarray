@@ -202,6 +202,11 @@
 (test-eqv 1 (sliver-extent (make-sliver (make-slice 5 8 2) 7)))
 (test-eqv 2 (sliver-extent (make-sliver (make-slice 5 8 2) 8)))
 (test-eqv 2 (sliver-extent (make-sliver (make-slice 5 8 2) 9)))
+; TODO Add more interesting test cases
+; Negative strides, including starts outside allowable range
+(test-eqv 4 (sliver-extent (make-sliver (make-slice #f #f -1) 4)))
+; FIXME Broken!
+; (test-eqv 2 (sliver-extent (make-sliver (make-slice #f #f -2) 4)))
 (test-end)
 
 (exit (if (zero? (test-runner-fail-count (test-runner-get))) 0 1))
