@@ -1,7 +1,7 @@
 ndarray
 =======
 
-[![Build Status](https://travis-ci.org/RhysU/ndarray.svg?branch=master)](https://travis-ci.org/RhysU/ndarray)
+[![Build Status](https://travis-ci.com/RhysU/ndarray.svg?branch=master)](https://travis-ci.com/github/RhysU/ndarray)
 
 Hacking on a [NumPy](http://www.numpy.org)-like
 [ndarray](https://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html) for
